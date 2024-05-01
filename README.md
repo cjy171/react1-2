@@ -50,7 +50,34 @@
 - bind를 사용하지 않으면 this.HandleClick은 글로벌 스코프에서 호출되어, undefined으로 사용할 수 없기 때문입니다.
 - bind를 사용하지 않으려면 화살표 함수를 사용하는 방법도 있습니다.
 - 하지만 클래스 컴포넌트는 이제 거의 사용하지 않기 때문에 이 내용은 참고만 합니다.
+```
 
+class Toggle extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = { isToggleOn: true };
+
+        // callback에서 `this`를 사용하기 위해서는 바인딩을 필수적으로 해줘야 합니다.
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.setState(prevState => ({
+            isToggleOn: !prevState.isToggleOn
+        }));
+    }
+
+    render() {
+        return(
+            <button onClick={this.handleClick}>
+                {this.state.isToggleOn ? '켜짐' : '꺼짐'}
+            </button>
+        );
+    }
+}
+
+```
 
 
 
