@@ -1,5 +1,93 @@
 # 최진영 202230337
 
+## 5월 22일 강의
+#### 리스트의 키
+- 리스트에서 키는 "리스트에서 아이템을 구별하기 위한 고유한 문자열" 입니다.
+- 이 키는 리스트에서 어떤 아이켐이 추가 또는 제거 되었는지 구분하기 위해 사용합니다.
+- 키는 같은 리스트에 있는 엘리먼트 사이에서만 고유한 값이면 됩니다.
+
+
+### ch_11 폼
+#### 폼이란
+- 폼은 일반적으로 사용자로부터 입력을 받기 위한 양식에서 많이 사용됩니다.
+#### 제어 컴포넌트
+- 제어 컴포넌트는 사용자가 입력한 값에 접근하고 제어할 수 있도록 해주는 컴포넌트입니다.
+
+
+
+## 5월 8일 강의
+#### Arguments 전달하기
+- 함수를 정의할 때는 파라미터 혹은 매개변수, 함수를 사용할 때는 아귀먼트 혹은 인수라고 부릅니다.
+- 이벤트 핸들러에 매개변수를 전달해야 하는 경우도 많습니다.
+```
+<button onClick={(event)=> this.deleteItem(id, event)}>삭제하기</button>
+<button onClick={this.deleteItem.bind(this, id)}>삭제하기</button>
+```
+- 위의 코드는 모두 동일한 역할을 하지만 한나는 화살표 함수를, 다른 하나는 bind를 사용했습니다.
+- event라는 매개변수는 리액트의 이벤트 객체를 의미합니다.
+- 두 방법 모두 첫 번째 매개변수는 id 이고 두 번째 매개변수로 event가 전달 됩니다.
+- 첫 번째 코드는 명시적으로 event를 매개변수로 넣어 주었고, 두 번째 코드는 id 이후 두번째 매개변수로 event가 자동 전달 됩니다.
+
+#### 조건부 렌더링
+```
+    function Greeting(props) {
+        const isLoggedIn = props.isLoggedIn;
+        if(isLoggedIn) {
+            return <UserGreeting />;
+        }
+        return <GuestGreeting />;
+    }
+```
+#### 엘리먼트 변수
+- 렌더링해야 될 컴포넌트를 변수처럼 사용하는 방법이 엘리먼트 변수입니다.
+```
+    let button;
+    if(isLoggedIn {
+        button = <LoggoutButton onClick={handleLogutClick} />;
+    }) else {
+        button = <LoginButton onClick={handleLogutClick} />;
+    }
+
+    return (
+        <div>
+            <Greeting isLoggedIn = {isLoggedIn} />
+            {button}
+        </div>
+    )
+```
+
+#### 인라인 조건
+- 필요한 곳에 조건문을 직접 넣어 사용하는 방법
+
+1. 인라인 if
+- if문을 직접 사용하지 않고, 동일한 효과를 내기 위해 &&논리 연산자를 사용합니다.
+- &&는 and연자로 모든 조건이 참일때만 참이 됩니다.
+- 첫 번 조건이 거짓이면 두번째 조건은 판단할 필요가 없습니다. 단축평가.
+```
+    true && expression -> expression
+    false && expression -> false
+
+    {unreadMessages.length > 0 &&
+        <h2>
+            현재 {unreadMessages.length}개의 읽지 않은 메세지가 있습니다.
+        </hr>
+    }
+```
+- 판단만 하지 않는 것이고, 결과 값은 그대로 리턴
+
+```
+    <>
+        {count && <h1>현재 카운트: {count}</h1>}
+    </>
+```
+ 2. 인라인 if-else
+ - 조건문 ? 참일 경우 : 거짓일 경우
+ - 삼항 연산자를 이용합니다.
+ - 문자열이나 엘리먼트를 넣어서 사용할 수도 있습니다.
+
+
+
+
 
 ## 5월 1일 강의
 #### 훅의 규칙
