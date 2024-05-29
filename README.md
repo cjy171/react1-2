@@ -1,5 +1,124 @@
 # 최진영 202230337
 
+## 5월 29일 강의
+#### Select 태그
+- select태그도 taxtarea와 동일합니다.
+```
+    <select>
+        <option value="apple">사과</option>
+        <option value="banana">바나나</option>
+        <option selected value="grape">포도</option>
+        <option value="watermelon">수박</option>
+    </select>
+```
+#### File input 태그
+- File input 태그는 그 값이 읽기 전용이기 때문에 리액트에서는 <span style="background-color:#ffdce0">비제어 컴포넌트</span>가 됩니다.
+> `<input type="file" />`
+
+#### Input Null Value
+- 제어 컴포넌트에 value prop을 정해진 값으로 넣으면 코드를 수정하지 않는 한 입력값을 바꿀 수 없습니다.
+- 만약 value prop 은 넣되 자유롭게 입력할 수 있게 만들고 싶다면 값이 undefined 또는 null을 넣어주면 됩니다.
+```
+    ReactDOM.render(<input value ="hi" />, rootNode);
+
+    setTimeout(function() {
+        ReactDOM.render(<input value={null} />, rootNode);
+    }, 1000);
+```
+
+#### (실습)사용자 정보 입력받기
+```
+import { useState } from "react";
+
+export default function SignUp() {
+  const [name, setName] = useState()
+  const [gender, setGender] = useState('여자') // 초기값을 '여자'로 설정
+  const [document, setDocument] = useState()
+  const [haveBreakfest, setHaveBreakfest] = useState(true)
+
+  const handleChangeName = (e) => {
+    setName(e.target.value)
+  }
+
+  const handleChangeGender = (e) => {
+    setGender(e.target.value)
+  }
+
+  const handleChangeDocument = (e) => {
+    setDocument(e.target.value)
+  }
+
+  const handleChangeHaveBreakfest = (e) => {
+    setHaveBreakfest(e.target.checked)
+  }
+
+  const handleSubmit = (e) => {
+    alert(`이름: ${name}, 성별: ${gender}, 문서: ${document}, 아침식사: ${haveBreakfest}`)
+    e.preventDefault()
+  }
+
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        이름:
+        <input type="text" value={name} onChange={handleChangeName} placeholder="이름을 입력해주세요."/>
+      </label>
+      <br />
+      <label>
+        성별:
+        <select value={gender} onChange = {handleChangeGender}>
+          <option value="남자">남자</option>
+          <option value="여자">여자</option>
+        </select>
+      </label>
+      <br />
+      <label>
+        문서:
+        <textarea value={document} onChange={handleChangeDocument}></textarea>
+      </label>
+      <br />
+      <lavel>
+        아침식사:
+        <input type="checkbox" checked={haveBreakfest} onClick={handleChangeHaveBreakfest} />
+      </lavel>
+      <br />
+      <button type="submit">제출</button>
+    </form>
+  )
+}
+```
+
+#### props
+- BoilingVerdict.jsx
+```
+export default function BoilingVerdict(props) {
+  if(props.delsius >= 100) {
+    return <p>물이 끓습니다.</p>
+  } else if(props.foo <= 0) {
+    return <p>물이 끓지 않습니다.</p>
+  }
+}
+```
+
+- App.js
+```
+import './App.css';
+import BoilingVerdict from './BoilingVerdict';
+
+function App() {
+  return (
+    <>
+      <BoilingVerdict celsius="100" foo="-3" />
+    </>
+  );
+}
+
+export default App;
+```
+
+
+
 ## 5월 22일 강의
 #### 리스트의 키
 - 리스트에서 키는 "리스트에서 아이템을 구별하기 위한 고유한 문자열" 입니다.
