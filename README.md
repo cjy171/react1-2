@@ -5,10 +5,144 @@
 - Shared state는 state의 공유를 의미합니다.
 - 같은 부모 컴포넌트의 state를 자식 컴포넌트가 공유해서 사용하는 것입니다.
 
-#### Calculator 컴포넌트 수정하기
-- State는 temperature, scale 2개를 사용합니다.
-- 이것을 이용해서
+    - Calculator.jsx
 
+        ```
+        import { useState } from "react"
+        import TemperatureInput from "./TemperatureInput"
+
+        export default function Calculator() {
+        return (
+            <>
+            <TemperatureInput scale='c' />
+            <TemperatureInput scale='f' />
+            </>
+        )
+        }
+
+        function toCelsius(fahrenheit) {
+        return (
+            (fahrenheit-32) * 1.8
+        )
+        }
+
+        function toFahrenheit(celsius) {
+        return (
+            (celsius * 1.8) +32
+        )
+        }
+
+        function tryConvert(temperature, convert) {
+        const input = parseFloat(temperature)
+        if(Number.isNaN(input)) {
+            return('')
+        }
+        const output = convert(input)
+        const rounded = Math.round(output * 1000) / 1000  
+        return (rounded.toString())
+        }
+        ```
+
+
+    - TemperatureInput.jsx
+        ```
+        import { useState } from "react"
+
+        export default function TemperatureInput(props) {
+        const scaleNames = {
+            c: '섭씨',
+            f: '화씨'
+        }
+        const [temperature, setTemperature] = useState()
+        const handleChange = (e) => {
+            setTemperature(e.target.value)
+        }
+        return (
+            <fieldset>
+            <legend>섭씨온도를 입력해주세요(단위:{scaleNames[props.scale]}) :</legend>
+            <input value={temperature} onChange={handleChange} />
+            </fieldset>
+        )
+        }
+        ```
+
+##### 정리하면
+- 상위 컴포넌트인 Calculator에서 온도와 단위를 state로 갖고,
+- 두 개의 하위 컴포넌트는 각각 섭씨와 화씨로 변환된 온도와 단위, 그리고 온도를 업데이트하기 위한 함수를 props로 갖고 있습니다.
+
+#### 합성
+- 합성(Composition)은 '여러 개의 컴포넌트를 합쳐서 새로운 컴포넌트를 만드는 것입니다.
+- 조합 방법에 따라 합성의 사용 기법은 다음과 같이 나눌 수 있습니다.
+
+### [1] Containment (담다, 포함하다, 격리하다)
+- 특정 컴포넌트가 하위 컴포넌트를 포함하는 형태의 합성 방법이다.
+- 컴포넌트에 따라서는 어떤 자식 엘리먼트가 들어올 지 미리 예상할 수 없는 경우가 있습니다.
+- 범용적인 '박스' 역할을 하는 Sidebar혹은 Dialog와 같은 컴포넌트에서 특히 자주 볼 수 있습니다.
+- 이런 컴포넌트에서는 children prop을 사용하여 자식 엘리먼트를 출력에 그대로 전달하는 것이 좋습니다.
+- 이때 children prop은 컴포넌트의 props에 기본적으로 들어있는 children속성을 사용합니다.
+- 다음과 같이 props.children을 사용하면 해당 컴포넌트의 하위 컴포넌트가 모두 children으로 들어오게 됩니다.
+```
+function FancyBorder(props) {
+    return (
+        <div className={'FancyBorder FancyBorder-' + props.color}>
+            {props.children}
+        </div>
+    );
+}
+```
+- children은 다음 구조에서 세 번째 들어가는 파라미터 입니다.
+- 파라미터가 배열로 되어있는 이유는 여러 개의 하위 컴포넌트를 가질 수 있기 때문입니다.
+- children이 배열로 되어있는 것은 여러 개의 하위 컴포넌트를 위한 것입니다.
+
+#### React.CreateElement()에 관하여
+- jsx를 사용하지 않는 경우의 props전달 방법입니다.
+> 정확히 말하면 JSX를 사용하지 않고 리액트로 엘리먼트를 생성하는 방법입니다.
+
+- FancyBorder를 사용한 예제입니다.
+```
+return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">어서오세요.</h1>
+      <p className="Dialog-message">우리 사이트 방문을 환영합니다.</p>
+    </FancyBorder>
+  )
+```
+
+- 리액트에서는 props.children을 통해 하위 컴포넌트를 하나로 모아서 제공해 줍니다.
+- 만일 여러 개의 children 집합이 필요한 경우는 별도로 props를 정의해서 각각 원하는 컴포넌트를 넣어줍니다.
+- 예와 같이 SplitPane은 화면을 왼쪽과 오른쪽으로 분할해 주고, App에서는 SplitPane을 사용해서 left, right 두 개의 props를 정의하고 있습니다.
+- 즉, App에서 left, right를 props를 받아서 화면을 분할하게 됩니다. 이처럼 여러 개의 children 집합이 필요한 경우 별도의 props를 정의해서 사용합니다.
+
+### [2] Specialization (특수화, 전문화)
+- 웰컴다이얼로그는 다이얼로그의 특별한 케이스입니다.
+- 범용적인 개념을 구별이 되게 구체화하는 것을 특수화라고 합니다.
+- 객체지향 언어에서는 상속을 사용하여 특수화를 구현합니다.
+- 리액트에서는 합성을 사용하여 특수화를 구현합니다.
+- 다음 예와 같이 특수화는 범용적으로 쓸 수 있는 컴포넌트를 만들어 놓고 이를 특수한 목적으로 사용하는 합성 방식입니다.
+```
+function Dialog(props) {
+    return (
+        <FancyBorder color="blue">
+            <h1 className="Dialog-title">
+                {props.title}
+            </h1>
+            <p className="Dialog-message">
+                {props.messgae}
+            </p>
+        </FancyBorder>
+    );
+}
+
+
+export default function WelcomeDialog() {
+  return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">어서오세요.</h1>
+      <p className="Dialog-message">우리 사이트 방문을 환영합니다.</p>
+    </FancyBorder>
+  )
+}
+```
 
 
 
@@ -24,7 +158,7 @@
     </select>
 ```
 #### File input 태그
-- File input 태그는 그 값이 읽기 전용이기 때문에 리액트에서는 <u>비제어 컴포넌트</u>가 됩니다.
+- File input 태그는 그 값이 읽기 전용이기 때문에 리액트에서는 비제어 컴포넌트가 됩니다.
 > `<input type="file" />`
 
 #### Input Null Value
