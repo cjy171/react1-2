@@ -1,5 +1,17 @@
 # 최진영 202230337
 
+## 6월 5일 강의
+#### Shared State
+- Shared state는 state의 공유를 의미합니다.
+- 같은 부모 컴포넌트의 state를 자식 컴포넌트가 공유해서 사용하는 것입니다.
+
+#### Calculator 컴포넌트 수정하기
+- State는 temperature, scale 2개를 사용합니다.
+- 이것을 이용해서
+
+
+
+
 ## 5월 29일 강의
 #### Select 태그
 - select태그도 taxtarea와 동일합니다.
@@ -12,7 +24,7 @@
     </select>
 ```
 #### File input 태그
-- File input 태그는 그 값이 읽기 전용이기 때문에 리액트에서는 <span style="background-color:#ffdce0">비제어 컴포넌트</span>가 됩니다.
+- File input 태그는 그 값이 읽기 전용이기 때문에 리액트에서는 <u>비제어 컴포넌트</u>가 됩니다.
 > `<input type="file" />`
 
 #### Input Null Value
